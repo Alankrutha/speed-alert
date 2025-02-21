@@ -1,0 +1,42 @@
+import time
+from geopy.distance import geodesic
+
+# Function to simulate getting the current GPS coordinates
+def get_current_location():
+    # In a real application, you would get this data from a GPS module
+    # Here we are using static coordinates for simulation purposes
+    return (12.9715987, 77.594566)  # Example coordinates (latitude, longitude)
+
+# Function to calculate speed
+def calculate_speed(start_coords, end_coords, time_elapsed):
+    # Calculate distance using geopy
+    distance_km = geodesic(start_coords, end_coords).km
+    # Speed in km/h
+    speed_kmh = (distance_km / time_elapsed) * 3600
+    return speed_kmh
+
+# Main function to monitor speed
+def monitor_speed():
+    speed_limit = 30  # Example speed limit in km/h
+    start_coords = get_current_location()
+    start_time = time.time()
+
+    while True:
+        time.sleep(5)  # Wait for 5 seconds before getting the next location update
+        end_coords = get_current_location()
+        end_time = time.time()
+
+        time_elapsed = end_time - start_time
+        speed = calculate_speed(start_coords, end_coords, time_elapsed)
+
+        print(f"Current Speed: {speed:.2f} km/h")
+
+        if speed > speed_limit:
+            print(f"Alert! You are exceeding the speed limit of {speed_limit} km/h.")
+
+        # Update start coordinates and start time for the next iteration
+        start_coords = end_coords
+        start_time = end_time
+
+# Run the speed monitor
+monitor_speed()
